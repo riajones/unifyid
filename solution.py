@@ -1,5 +1,7 @@
 import math
+import struct
 import os.path
+import wave
 from PIL import Image
 from get_numbers import request
 
@@ -10,7 +12,7 @@ def create_image(download=True):
 	if download or not os.path.isfile('bits.txt'):
 		rgb_vals = request(math.pow(size,2) * 3)
 		# cache last downloaded values to save time and load on random.org
-		open('bits.txt', 'w').write(rgb_vals)
+		open('bits.txt', 'w').write(str(rgb_vals))
 	else:
 		# Load last downloaded vals
 		rgb_vals = open('bits.txt').read()
@@ -30,6 +32,34 @@ def create_image(download=True):
 	im.putdata(pixels)
 	im.save('image.bmp')
 
+def create_wav(download=True):
+	length = 3
+	# Note that I had to use a very low sample rate to get around the bit quota on random.org
+	# sample_rate = 44100
+	sample_rate = 320
+	wav_max = 32767
 
 
-create_image(False)
+	values = []
+	if download or not os.path.isfile('noise.txt'):
+		values = request(length * sample_rate, wav_max * -1, wav_max)
+		# cache last downloaded values to save time and load on random.org
+		open('noise.txt', 'w').write(str(values))
+	else:
+		# Load last downloaded vals
+		values = open('noise.txt').read()
+		import re
+		values = re.sub(r' |\[|\]', '', values)
+		values = list(map(int, values.split(',')))
+
+
+	out = wave.open('sound.wav', 'w')
+	out.setparams((2, 2, sample_rate, 0, 'NONE', 'not compressed'))
+
+	for val in values:
+		out.writeframesraw(struct.pack('<hh', val, val ))
+	out.close()
+
+
+create_image()
+create_wav()

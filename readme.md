@@ -1,5 +1,6 @@
 I wasn't sure if I was allowed to use any libraries for this, but the instructions didn't specify that I couldn't so I figured I might as well.
-
+I finished the image generation portion very quickly, so even though the assignment only specifies that I need to do one of the following,
+i decided to generate a .wav as well.
 
 Fun with Random.org
 

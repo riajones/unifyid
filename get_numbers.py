@@ -1,11 +1,8 @@
 import time
 import urllib.request
 
+# Note that these sizes are optimized for rgb values
 def request(number, min_val=0, max_val=255):
-	if min_val < 0 or min_val > 255:
-		min_val = 0
-	if max_val < 0 or max_val > 255:
-		max_val = 255
 	if min_val > max_val:
 		min_val = max_val
 
@@ -26,6 +23,7 @@ def request(number, min_val=0, max_val=255):
 		nums.pop()
 		numbers.extend(map(int, nums))
 
+		print('Downloading Numbers: %d / %d' % (len(numbers), number))
 
 		# random.org has asked for a large timeout between requests, they don't specify what "large" is
 		# but 5 seconds seems huge, so I'm hoping that counts
